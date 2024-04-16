@@ -30,7 +30,7 @@ my $fpu = sub {
     else			{ ""; }
 };
 my $hidden = sub {
-    if ($flavour =~ /ios/)	{ ".private_extern\t".join(',',@_); }
+    if ($flavour =~ /ios|visionos/)	{ ".private_extern\t".join(',',@_); }
     elsif ($flavour =~ /win64/) { ""; }
     else			{ ".hidden\t".join(',',@_); }
 };
@@ -58,7 +58,7 @@ my $globl = sub {
     my $ret;
 
     SWITCH: for ($flavour) {
-	/ios/		&& do { $name = "_$name";
+	/ios|visionos/		&& do { $name = "_$name";
 				last;
 			      };
     }
@@ -109,7 +109,7 @@ my $asciz = sub {
     {	"";	}
 };
 my $section = sub {
-    if ($flavour =~ /ios/) {
+    if ($flavour =~ /ios|visionos/) {
         if ($_[0] eq ".rodata") {
             return ".section\t__TEXT,__const";
         }
@@ -163,7 +163,7 @@ if ($flavour =~ /linux/) {
     # Although the flavour is specified as "linux", it is really used by all
     # ELF platforms.
     $target_defines = "defined(__ELF__)";
-} elsif ($flavour =~ /ios/) {
+} elsif ($flavour =~ /ios|visionos/) {
     # Although the flavour is specified as "ios", it is really used by all Apple
     # platforms.
     $target_defines = "defined(__APPLE__)";
@@ -223,7 +223,7 @@ while(my $line=<>) {
 	    $opcode = eval("\$$mnemonic");
 	}
 
-	if ($flavour =~ /ios/) {
+	if ($flavour =~ /ios|visionos/) {
 	    # Mach-O and ELF use different syntax for these relocations. Note
 	    # that we require :pg_hi21: to be explicitly listed. It is normally
 	    # optional with adrp instructions.

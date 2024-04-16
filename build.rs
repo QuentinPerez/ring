@@ -199,24 +199,29 @@ const ASM_TARGETS: &[AsmTarget] = &[
     },
     AsmTarget {
         oss: MACOS_ABI,
+        arch: AARCH64,
+        perlasm_format: "visionos64",
+    },
+    AsmTarget {
+        oss: MACOS_ABI,
         arch: X86_64,
         perlasm_format: "macosx",
     },
-    AsmTarget {
-        oss: &[WINDOWS],
-        arch: X86,
-        perlasm_format: WIN32N,
-    },
-    AsmTarget {
-        oss: &[WINDOWS],
-        arch: X86_64,
-        perlasm_format: NASM,
-    },
-    AsmTarget {
-        oss: &[WINDOWS],
-        arch: AARCH64,
-        perlasm_format: "win64",
-    },
+    // AsmTarget {
+    //     oss: &[WINDOWS],
+    //     arch: X86,
+    //     perlasm_format: WIN32N,
+    // },
+    // AsmTarget {
+    //     oss: &[WINDOWS],
+    //     arch: X86_64,
+    //     perlasm_format: NASM,
+    // },
+    // AsmTarget {
+    //     oss: &[WINDOWS],
+    //     arch: AARCH64,
+    //     perlasm_format: "win64",
+    // },
 ];
 
 struct AsmTarget {
@@ -257,7 +262,7 @@ const NASM: &str = "nasm";
 
 /// Operating systems that have the same ABI as macOS on every architecture
 /// mentioned in `ASM_TARGETS`.
-const MACOS_ABI: &[&str] = &["ios", MACOS, "tvos"];
+const MACOS_ABI: &[&str] = &["ios", MACOS, "tvos", "visionos"];
 
 const MACOS: &str = "macos";
 const WINDOWS: &str = "windows";
@@ -305,7 +310,7 @@ fn ring_build_rs_main(c_root_dir: &Path, core_name_and_version: &str) {
     let os = env::var("CARGO_CFG_TARGET_OS").unwrap();
     let env = env::var("CARGO_CFG_TARGET_ENV").unwrap();
 
-    let is_git = std::fs::metadata(c_root_dir.join(".git")).is_ok();
+    let is_git = false;
 
     // Published builds are always built in release mode.
     let is_debug = is_git && env::var("DEBUG").unwrap() != "false";
@@ -356,7 +361,7 @@ fn ring_build_rs_main(c_root_dir: &Path, core_name_and_version: &str) {
         &out_dir,
         core_name_and_version,
     );
-    emit_rerun_if_changed()
+    emit_rerun_if_changed();
 }
 
 fn pregenerate_asm_main(c_root_dir: &Path, core_name_and_version: &str) {

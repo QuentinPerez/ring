@@ -170,7 +170,12 @@ fn detect_features() -> u32 {
 
 #[cfg(all(
     target_arch = "aarch64",
-    any(target_os = "ios", target_os = "macos", target_os = "tvos")
+    any(
+        target_os = "ios",
+        target_os = "visionos",
+        target_os = "macos",
+        target_os = "tvos"
+    )
 ))]
 fn detect_features() -> u32 {
     // TODO(MSRV 1.64): Use `name: &core::ffi::CStr`.
@@ -225,7 +230,12 @@ fn detect_features() -> u32 {
         target_os = "fuchsia",
         all(target_os = "linux", not(target_env = "uclibc")),
         target_os = "windows",
-        any(target_os = "ios", target_os = "macos", target_os = "tvos"),
+        any(
+            target_os = "ios",
+            target_os = "visionos",
+            target_os = "macos",
+            target_os = "tvos"
+        ),
     ))
 ))]
 fn detect_features() -> u32 {
