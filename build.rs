@@ -333,17 +333,17 @@ fn ring_build_rs_main(c_root_dir: &Path, core_name_and_version: &str) {
     // If `.git` doesn't exist then assume that this is a packaged build where
     // we want to optimize for minimizing the build tools required: No Perl,
     // no nasm, etc.
-    let generated_dir = if !is_git {
-        c_root_dir.join(PREGENERATED)
-    } else {
-        generate_sources_and_preassemble(
-            &out_dir,
-            asm_target.into_iter(),
-            c_root_dir,
-            core_name_and_version,
-        );
-        out_dir.clone()
-    };
+    // let generated_dir = if !is_git {
+    //     c_root_dir.join(PREGENERATED)
+    // } else {
+    generate_sources_and_preassemble(
+        &out_dir,
+        asm_target.into_iter(),
+        c_root_dir,
+        core_name_and_version,
+    );
+    let generated_dir = out_dir.clone();
+    // };
 
     build_c_code(
         asm_target,
